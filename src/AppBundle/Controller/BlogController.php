@@ -54,6 +54,7 @@ class BlogController extends Controller
         $blog=$this->getDoctrine()
             ->getRepository('AppBundle:Blog')
             ->find($id);
+        
         $comment = new Comment();
         $form = $this->createFormBuilder($comment)
             ->add('comment',TextareaType::class,array('attr'=>array('class'=>'form-control','style'=>'margin-bottom:15px;','placeholder'=>'write a comment'),'label'=>false))
