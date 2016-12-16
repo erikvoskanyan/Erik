@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    {#<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#text').keydown(function() {
+                var message = $("textarea").val();
+                if (event.keyCode == 13) {
+                    if (message == "") {
+                        alert("Enter Some Text In Textarea");
+                    } else {
+                        $('#my_form').submit();
+                        alert("Succesfully submitted:- " + message);
+                    }
+                    $("textarea").val('');
+                    return false;
+                }
+            });
+        });
+    </script>#}
+    <div>
+         <a  href="{{ path('blog') }}">
+             <button type="button" class="btn btn-info btn-sm">
+                 <span class="glyphicon glyphicon-circle-arrow-left"></span> Back
+             </button>
+         </a>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+           <div class="well" style="box-shadow: 10px 10px 5px #d0dce0;border-radius: 25px 0 ;background-color: transparent">
+               Blog {{ blog.id }}|<h2>{{ blog.name }}</h2>
+           </div>
+            <strong>{{ blog.dueDate|date("d.m.Y") }}</strong>
+            <div class=" row well">
+                <div class="col-md-12"><img class="img-responsive" style="max-width:250px" src="{{ asset('uploads/img/'~blog.path) }}">
+                 <p style="text-align: justify" >{{ blog.description }}</p><span><i>Author: {{ blog.username|upper }}</i></span></div>
+            </div>
+            {% if comment|length-1 !=0 %}
+            <div class="row well well-lg" >
+                {% endif %}
+                {% for com in comment  %}
+                {% if  com.comment %}
+                    <div class="row" style="margin-top: 5px">
+                       <div class="col-md-1 col-sm-2">
+                           <span style="background-color: darkslategrey; margin-top: 5px; color: white;border-radius: 25px;padding: 5px 5px 5px 5px"> {{ com.user }} </span>
+                       </div>
+                        <div class="col-md-7 col-md-offset-4 col-sm-10"
+                             style=" border: 2px solid #a1a1a1;
+                             padding: 10px 40px;
+                             background: #ddeff1;
+                             max-width: 700px;
+                             border-radius: 25px;">
+                            <div class="row">
+                                <div class="col-md-8 col-xs-8 col-sm-8">
+                                        {% if loop.index %2 %}
+                                        <p style="color: #ea3f49"> {{ com.comment}}</p>
+                                    {% else %}
+                                        <p style="color: #204d74 "> {{ com.comment}}</p>
+                                    {% endif %}
+
+                                </div>
+                                    <div class=" pull-right">
+                                        {{ com.created|date("d-m-Y H:i:s","GMT+4")}}
+                                    </div>
+                                </div>
+                        </div>
+                       </div><hr>
+                {% endif %}
+                {% endfor %}
+            </div>
+            </div>
+        <div class="row"><i style="padding-left: 15px"><b>Comment: </b></i> {{ comment|length-1 }} </div>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        <script type="text/javascript">
+                $("#form_comment").val("");
+        </script>
+    </div>
+
+{% endblock %}
+
+
+
+
+
+
+

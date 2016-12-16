@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+           <p style="background-color: #b2dba1">
+               <h1>Blog</h1>
+           </p>
+            {% for blog in blogs %}
+                <h3><a href="{{ path('show', {'id':blog.id }) }}" ><p class="bg-info">{{ blog.name }}</p></a></h3>
+                <h5>Category: {{ blog.category }}({{ blog.id }})</h5>
+                <strong>{{ blog.dueDate|date("d.m.Y") }}</strong>
+                <div class="col-md-12">
+                    <p style="text-align: justify;">
+                        {#{{ blog.description|length>500?blog.description|slice(0,500)~ : blog.description }}#}
+                        {% if blog.description|length>500 %}
+                            {{ blog.description|slice(0,500) }}
+                            </p>
+                            <a class="btn btn-primary btn-sm pull-right" href="{{ path('show', {'id':blog.id}) }}">See more</a>
+                            {% else %}
+                                <p>{{ blog.description }}</p>
+                                {% endif %}
+
+                </div>
+        </div>
+    </div>
+         <div class="row">
+            <div class="col-md-12">
+                    {% if app.user %}
+                        {% if blog.username == app.user.username %}
+                            <h5 style="color: #28a4c9">{{ app.user.username }}</h5>
+                            <a class="btn btn-success btn-sm" href="{{ path('edit', {'id': blog.id}) }}">Edit blog</a>
+                            <a class="btn btn-default btn-sm" href="{{ path('show', {'id': blog.id}) }}">add comment</a>
+                            <a class="btn btn-danger btn-sm" href="{{ path('delete', {'id': blog.id}) }}">Delete blog</a>
+                            <hr style="border-top: 1px solid #421818">
+                            {% elseif  app.user %}
+                                <span style="background-color: #dca7a7"></span><a class="btn btn-default btn-sm" href="/blog/show/{{ blog.id }}">add comments</a>
+                                <hr style="border-top: 1px solid #421818">
+                    {% endif %}
+                    {% elseif not app.user %}
+                       <span style="background-color: #dca7a7"><a class="btn btn-success btn-sm" href="/blog/show/{{ blog.id }}">add comments</a>
+                           For add blog  please
+                       </span><a href="/login">login</a>
+                        <hr style="border-top: 1px solid #421818">
+                        {## user is not logged in (note the `not` in the `elseif` statement)#}
+                    {% endif %}
+            {% endfor %}
+            </div>
+         </div>
+
+{% endblock %}
